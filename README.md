@@ -228,3 +228,129 @@ Downloads the latest binary for your platform and replaces your current installa
 - **`--workspace` requires `FIGMA_TOKEN`** — it needs REST API access to scan page children
 - **`--sections` only works in single-page mode** — ignored when extracting multiple pages
 - macOS binaries are not code-signed — users may need to allow them in **System Settings → Privacy & Security** on first run
+
+
+
+```
+Last login: Wed Apr 29 15:01:59 on ttys000
+jasonmitchell@MacBookPro ~ % npm uninstall lobster
+
+up to date in 696ms
+jasonmitchell@MacBookPro ~ % lober -v
+zsh: command not found: lober
+jasonmitchell@MacBookPro ~ % lobster -v
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+error: unknown option '-v'
+jasonmitchell@MacBookPro ~ % curl -L https://github.com/jason-bfj/lobster-releases/releases/latest/download/lobster-macos-x64 \
+  -o /usr/local/bin/lobster && chmod +x /usr/local/bin/lobster
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 48.9M  100 48.9M    0     0  7347k      0  0:00:06  0:00:06 --:--:-- 9932k
+jasonmitchell@MacBookPro ~ % lobster -h
+(node:8981) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
+(Use `lobster --trace-warnings ...` to show where the warning was created)
+/snapshot/lobster/node_modules/chalk/source/vendor/supports-color/index.js:1
+import process from 'node:process';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._compile (pkg/prelude/bootstrap.js:1926:32)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at Module.require (pkg/prelude/bootstrap.js:1840:31)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/snapshot/lobster/node_modules/chalk/source/index.js:47:37)
+
+Node.js v20.20.2
+jasonmitchell@MacBookPro ~ % lobster -help
+(node:8983) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
+(Use `lobster --trace-warnings ...` to show where the warning was created)
+/snapshot/lobster/node_modules/chalk/source/vendor/supports-color/index.js:1
+import process from 'node:process';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._compile (pkg/prelude/bootstrap.js:1926:32)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at Module.require (pkg/prelude/bootstrap.js:1840:31)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/snapshot/lobster/node_modules/chalk/source/index.js:47:37)
+
+Node.js v20.20.2
+jasonmitchell@MacBookPro ~ % lobster extract
+(node:8984) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
+(Use `lobster --trace-warnings ...` to show where the warning was created)
+/snapshot/lobster/node_modules/chalk/source/vendor/supports-color/index.js:1
+import process from 'node:process';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._compile (pkg/prelude/bootstrap.js:1926:32)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at Module.require (pkg/prelude/bootstrap.js:1840:31)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/snapshot/lobster/node_modules/chalk/source/index.js:47:37)
+
+Node.js v20.20.2
+jasonmitchell@MacBookPro ~ % npm install chalk@4
+
+added 6 packages, and audited 7 packages in 2s
+
+2 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+jasonmitchell@MacBookPro ~ % lobster -help      
+(node:9049) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
+(Use `lobster --trace-warnings ...` to show where the warning was created)
+/snapshot/lobster/node_modules/chalk/source/vendor/supports-color/index.js:1
+import process from 'node:process';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
+    at Module._compile (node:internal/modules/cjs/loader:1495:20)
+    at Module._compile (pkg/prelude/bootstrap.js:1926:32)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at Module.require (pkg/prelude/bootstrap.js:1840:31)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/snapshot/lobster/node_modules/chalk/source/index.js:47:37)
+
+Node.js v20.20.2
+jasonmitchell@MacBookPro ~ % chalk -v
+zsh: command not found: chalk
+jasonmitchell@MacBookPro ~ % npm uninstall chalk
+
+removed 6 packages, and audited 1 package in 488ms
+
+found 0 vulnerabilities
+jasonmitchell@MacBookPro ~ % rm /usr/local/bin/lobster
+jasonmitchell@MacBookPro ~ % lobster -h
+zsh: command not found: lobster
+jasonmitchell@MacBookPro ~ % npm uninstall chalk
+
+up to date, audited 1 package in 424ms
+
+found 0 vulnerabilities
+jasonmitchell@MacBookPro ~ % 
+
+```
