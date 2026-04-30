@@ -6,26 +6,6 @@ Runs entirely locally. No backend, no account required beyond a Figma token.
 
 ---
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Commands](#commands)
-  - [extract](#extract)
-  - [debug](#debug)
-  - [tools](#tools)
-  - [update](#update)
-- [Configuration](#configuration)
-- [Output Structure](#output-structure)
-- [Figma MCP Connection](#figma-mcp-connection)
-- [Self-Update](#self-update)
-- [Local Development](#local-development)
-- [Release Pipeline](#release-pipeline)
-- [Gotchas](#gotchas)
-
----
-
 ## Installation
 
 ### macOS (Apple Silicon)
@@ -114,31 +94,21 @@ lobster extract "https://..." --workspace "Design System"
 
 # Include image and SVG asset downloads
 lobster extract "https://..." --assets
-
-# Extract only sections 1 and 3 (single-page mode)
-lobster extract "https://..." --sections "1,3"
 ```
 
 #### `--workspace` explained
 
-When set, Lobster scans the named Figma section group (default: `"Workspace"`) to find which components are actually used on your page designs, then only extracts those components from the library. This avoids pulling the entire component library when you only need a subset.
-
-It also writes a `page-manifest.json` showing every block on every workspace page — flagged as matched (extracted) or unmatched (not found in the library). Requires `FIGMA_TOKEN`.
+When set, Lobster scans the named Figma section group (default: `"Workspace"`) to find which components are actually used on your page designs, then only extracts those from the library. Also writes a `page-manifest.json` showing every block on every workspace page — flagged as matched or unmatched. Requires `FIGMA_TOKEN`.
 
 ---
 
 ### `debug`
 
-Call a Figma MCP tool directly and dump the raw response. Useful for inspecting what data is available before building extraction logic.
+Call a Figma MCP tool directly and dump the raw response.
 
 ```bash
-lobster debug <tool> <fileKey> [options]
+lobster debug <tool> <fileKey> [--node-id <id>]
 ```
-
-| Argument | Description |
-|---|---|
-| `<tool>` | MCP tool name (see below) |
-| `<fileKey>` | Figma file key (the `FILEID` portion of the URL) |
 
 | Tool | Description |
 |---|---|
@@ -146,14 +116,6 @@ lobster debug <tool> <fileKey> [options]
 | `get_metadata` | File/node metadata (frames, pages, sizes) |
 | `get_variable_defs` | Figma variable definitions (design tokens) |
 | `get_screenshot` | Node screenshot |
-
-```bash
-lobster debug get_design_context FILEID
-lobster debug get_metadata FILEID --node-id 3-75
-lobster debug get_variable_defs FILEID
-```
-
-Saves the raw response to `./debug-{tool}-{fileKey}.json`.
 
 ---
 
@@ -175,7 +137,7 @@ Check for a newer version and replace the current binary with the latest release
 lobster update
 ```
 
-Lobster also performs a passive background check after every command. If a newer version is available you will be notified automatically.
+Lobster also performs a passive background check after every command and notifies you if an update is available.
 
 ---
 
@@ -219,8 +181,6 @@ Place in your working directory to control how Lobster categorises Figma pages:
 
 **`skipPages`** — page names to skip (case-insensitive substring match). Lobster always skips pages containing `cover` or `thumbnail` by default.
 
-Without this file, Lobster auto-detects the category from the Figma page name.
-
 ---
 
 ## Output Structure
@@ -229,85 +189,19 @@ Without this file, Lobster auto-detects the category from the Figma page name.
 [output-dir]/
   style-guide/
     index.json              ← design tokens (colors, typography, spacing, effects)
-                              + any style-guide category components
   components/
     {slug}/
       index.json            ← assembled block definition
       assets.json           ← image/icon references (only if section has assets)
   page-manifest.json        ← workspace page compositions (only with --workspace)
   [fileKey]/
-    _raw/                   ← internal data — useful for debugging, not for direct use
-      section-map.json
-      tokens/
-        colors.json
-        typography.json
-        spacing.json
-        effects.json
-      sections/
-        [slug]/
-          normalised.json
-          assets.json
-          metadata.json
-      assets/               ← downloaded files (only with --assets)
+    _raw/                   ← internal data — useful for debugging
     manifest.json           ← extraction run summary
-```
-
-### `style-guide/index.json`
-
-```json
-{
-  "extractedAt": "...",
-  "colors": {
-    "brand-primary": { "hex": "#FF4040", "rgba": "rgba(255,64,64,1)", "opacity": 1 }
-  },
-  "typography": {
-    "heading-1": { "fontFamily": "Inter", "fontWeight": 700, "fontSize": 48, "lineHeight": 67 }
-  },
-  "spacing": { "xs": 4, "sm": 8, "md": 16, "lg": 24 },
-  "effects": { "radii": { "sm": 4, "md": 8 } }
-}
-```
-
-### `components/{slug}/index.json`
-
-```json
-{
-  "id": "4174:110099",
-  "name": "Navbar / 1 /",
-  "role": "section",
-  "bounds": { "width": 1440, "height": 80 },
-  "layout": { "mode": "HORIZONTAL", "padding": { "top": 0, "right": 80, "bottom": 0, "left": 80 }, "gap": 0 },
-  "fills": [],
-  "children": [ ... ],
-  "assets": { "images": [], "icons": [] },
-  "breakpoints": { "mobile": { ... } }
-}
-```
-
-### `page-manifest.json`
-
-```json
-{
-  "extractedAt": "...",
-  "pages": [
-    {
-      "id": "6383:168",
-      "name": "Homepage Design",
-      "slug": "homepage-design",
-      "blocks": [
-        { "name": "Navbar / 1 /", "nodeId": "12233:2234", "slug": "navbar-1", "matched": true },
-        { "name": "Partnership Block", "nodeId": "12233:9999", "slug": "partnership-block", "matched": false }
-      ]
-    }
-  ]
-}
 ```
 
 ---
 
 ## Figma MCP Connection
-
-Lobster supports two MCP endpoints and auto-detects which to use:
 
 | Mode | Endpoint | When to use |
 |---|---|---|
@@ -315,8 +209,6 @@ Lobster supports two MCP endpoints and auto-detects which to use:
 | Remote | `https://mcp.figma.com/mcp` | Headless use — requires `FIGMA_TOKEN` |
 
 Lobster tries the desktop endpoint first. If the Figma app is not running it falls back to the remote endpoint. Override with `--endpoint` on any command.
-
-When `FIGMA_TOKEN` is set, Lobster prefers the Figma REST API for structure and token data to avoid burning the MCP daily rate limit.
 
 ---
 
@@ -326,58 +218,7 @@ When `FIGMA_TOKEN` is set, Lobster prefers the Figma REST API for structure and 
 lobster update
 ```
 
-Downloads the latest binary for your platform from [jason-bfj/lobster-releases](https://github.com/jason-bfj/lobster-releases/releases) and replaces your current installation. Lobster also checks passively in the background after every command.
-
----
-
-## Local Development
-
-Requirements: Node.js >= 20
-
-```bash
-# Install dependencies
-npm install
-
-# Build TypeScript → dist/
-npm run build
-
-# Watch mode (rebuild on save)
-npm run dev
-
-# Link globally for local testing (re-run after every build)
-npm install -g . --force
-
-# Compile platform binaries (outputs to bin/)
-npm run package
-```
-
----
-
-## Release Pipeline
-
-1. Make your changes on `main`
-2. Bump the version in `package.json`
-3. Commit and push to `main`
-4. Trigger the build:
-   ```bash
-   git push origin main:releases
-   ```
-5. GitHub Actions will:
-   - Build TypeScript
-   - Compile 4 platform binaries via `@yao-pkg/pkg`
-   - Publish a release to [jason-bfj/lobster-releases](https://github.com/jason-bfj/lobster-releases) with all binaries attached
-
-Alternatively, trigger a release manually from the GitHub Actions UI and specify the version.
-
-### Required secret
-
-The workflow on `jason-bfj/lobster` requires:
-
-| Secret | Value |
-|---|---|
-| `RELEASES_PAT` | Fine-grained PAT scoped to `jason-bfj/lobster-releases` with **Contents: Read and write** |
-
-PATs expire after 90 days. To renew: GitHub → Settings → Personal access tokens → Fine-grained tokens → Lobster → **Regenerate**, then update the secret in `jason-bfj/lobster` → Settings → Secrets → Actions.
+Downloads the latest binary for your platform and replaces your current installation. Lobster also checks passively in the background after every command.
 
 ---
 
@@ -386,7 +227,4 @@ PATs expire after 90 days. To renew: GitHub → Settings → Personal access tok
 - **Always quote Figma URLs** — the `&` character in URLs is a shell background operator when unquoted
 - **`--workspace` requires `FIGMA_TOKEN`** — it needs REST API access to scan page children
 - **`--sections` only works in single-page mode** — ignored when extracting multiple pages
-- `bin/` is gitignored — compiled binaries are never committed to source
-- `private: true` in `package.json` — this package cannot be published to npm
-- `pkg` bytecode warnings during build are harmless
 - macOS binaries are not code-signed — users may need to allow them in **System Settings → Privacy & Security** on first run
