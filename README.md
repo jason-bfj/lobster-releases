@@ -231,7 +231,7 @@ Downloads the latest binary for your platform and replaces your current installa
 
 
 
-``` markdown
+``` node
 Mac:lobster-cli bfjdigital4$ lobster -h
 Usage: lobster [options] [command]
 
@@ -255,29 +255,12 @@ curl -L https://github.com/jason-bfj/lobster-releases/releases/latest/download/l
 
 
 ```
-``` markdown
-lobster -h
-(node:9148) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
-(Use `lobster --trace-warnings ...` to show where the warning was created)
-/snapshot/lobster/node_modules/chalk/source/vendor/supports-color/index.js:1
-import process from 'node:process';
-^^^^^^
+``` node
+curl -L https://github.com/jason-bfj/lobster-releases/releases/latest/download/lobster-macos-x64 \
+  -o /usr/local/bin/lobster && chmod +x /usr/local/bin/lobster
+Then lobster -h should work cleanly this time.
 
-SyntaxError: Cannot use import statement outside a module
-    at wrapSafe (node:internal/modules/cjs/loader:1464:18)
-    at Module._compile (node:internal/modules/cjs/loader:1495:20)
-    at Module._compile (pkg/prelude/bootstrap.js:1926:32)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
-    at Module.load (node:internal/modules/cjs/loader:1266:32)
-    at Module._load (node:internal/modules/cjs/loader:1091:12)
-    at Module.require (node:internal/modules/cjs/loader:1289:19)
-    at Module.require (pkg/prelude/bootstrap.js:1840:31)
-    at require (node:internal/modules/helpers:182:18)
-    at Object.<anonymous> (/snapshot/lobster/node_modules/chalk/source/index.js:47:37)
+All green in 20 seconds. v1.0.8 is confirmed live on jason-bfj/lobster-releases.
 
-Node.js v20.20.2
-jasonmitchell@MacBookPro ~ % node -v
-v22.22.0
-jasonmitchell@MacBookPro ~ % 
-
+Good timing on that notification. Ball's in Jason's court now — reinstall and it should be clean.
 ```
